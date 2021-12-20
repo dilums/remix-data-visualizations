@@ -4,12 +4,16 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
+import styles from "./tailwind.css";
 import type { MetaFunction } from "remix";
 
+export function links() {
+  return [{ rel: "stylesheet", href: styles }];
+}
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Remix | Animations & Visualizations" };
 };
 
 export default function App() {
@@ -21,8 +25,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Outlet />
+      <body className="bg-neutral-900 grid h-screen place-items-center text-neutral-200">
+        <div className="bg-neutral-800 max-w-4xl w-full rounded-md flex flex-wrap px-1.5 pt-1.5 pb-3 shadow-xl">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
