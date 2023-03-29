@@ -1,4 +1,4 @@
-import { Link, useLoaderData, json, redirect } from "remix";
+import { Link, useLoaderData } from "@remix-run/react";
 import { useSprings, animated } from "@react-spring/web";
 import {
   BarChart,
@@ -15,11 +15,11 @@ import {
 import Widget from "~/components/Widget";
 import data from "~/data";
 
-import type { LoaderFunction } from "remix";
+import { json, redirect } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import { useEffect } from "react";
 
-const COLORS = ['#82af9b', '#c8c8aa', '#facdaf', '#fa9b9b','#ff4164'];
-
+const COLORS = ["#82af9b", "#c8c8aa", "#facdaf", "#fa9b9b", "#ff4164"];
 
 export const loader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);
@@ -27,7 +27,7 @@ export const loader: LoaderFunction = ({ request }) => {
 
   let rtData = [];
   if (tab && data.hasOwnProperty(tab)) {
-    rtData = data[tab];
+    rtData = (data as any)[tab];
     return json(
       { ...rtData, tab },
       {
@@ -39,13 +39,13 @@ export const loader: LoaderFunction = ({ request }) => {
   }
   return redirect("/?tab=daily");
 };
-export default function index() {
+export default function Index() {
   const [springs, api] = useSprings(3, () => ({ value: 0 }));
   const graphData = useLoaderData();
 
   useEffect(() => {
     api.start((index) => ({ value: graphData.headerData[index] }));
-  }, [graphData]);
+  }, [graphData, api]);
   return (
     <>
       <div className="w-full flex  items-center justify-between p-1.5">
@@ -109,7 +109,6 @@ export default function index() {
       <Widget title="Page Views" className="w-1/3">
         <ResponsiveContainer width="100%" height="100%" id="aaa">
           <PieChart width={400} height={400}>
-            
             <Pie
               data={graphData.pageViews}
               dataKey="value"
@@ -120,9 +119,12 @@ export default function index() {
               fill="#82ca9d"
               label
             >
-              {graphData.pageViews.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
+              {graphData.pageViews.map((_: any, index: number) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
             </Pie>
             <Tooltip />
           </PieChart>

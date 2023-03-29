@@ -5,13 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+} from "@remix-run/react";
 import styles from "./tailwind.css";
-import type { MetaFunction } from "remix";
+import type { MetaFunction, LinksFunction } from "@remix-run/node";
 
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 export const meta: MetaFunction = () => {
   return { title: "Remix | Animations & Visualizations" };
 };
